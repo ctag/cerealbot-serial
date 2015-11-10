@@ -1,7 +1,13 @@
 {
-  "name": "node-serial",
-  "version": "0.0.0",
+  "author": {
+    "name": "Christopher Bero",
+    "email": "csb0019@uah.edu",
+    "url": "https://256.makerslocal.org/wiki/Cerealbot"
+  },
+  "name": "cerealbot-serial",
+  "version": "0.0.2",
   "private": true,
+  "license": "SEE LICENSE FILE",
   "scripts": {
     "start": "node ./bin/www"
   },
@@ -12,6 +18,16 @@
     "express": "~4.13.1",
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
+    "request": "^2.61.0",
+    "serialport": "2.0.2",
     "serve-favicon": "~2.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ctag/cerealbot-serial"
+  },
+  "config": {
+    "port": "3030",
+    "dev": "/dev/ttyAMA0"
   }
 }
