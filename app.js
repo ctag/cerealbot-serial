@@ -15,6 +15,7 @@ var serialport = require("serialport");
 var SerialPort = serialport.SerialPort;
 var util = require("util");
 var stdin = process.openStdin();
+const exec = require('child_process').exec;
 
 //var routes = require('./routes/index');
 //var users = require('./routes/users');
@@ -55,6 +56,15 @@ function sendCommand(req, res) {
 	//});
 }
 
+serial.on('data', function handleData (data) {
+	console.log("Data from serial: ", data);
+	if (data === '!p0!') {
+		console.log("Out of filament, pausing print!");
+		var child = exec('/home/berocs/cerealbot/util/send_pause_print.sh');
+	}
+	serial.removeListener('data', handleData);
+});
+
 function sendCommandResp(req, res) {
 	//serial.open(function (error) {
 		// if (error) {
@@ -84,6 +94,10 @@ function sendCommandResp(req, res) {
 				// 	serial.close();
 				// 	console.log("Success, it seems, closing port.");
 				// }
+				if (data === '!p0!') {
+					console.log("Out of filament, pausing print!");
+					var child = exec('/home/berocs/cerealbot/util/send_pause_print.sh');
+				}
 				serial.removeListener('data', handleData);
 			});
 		}); // end serial.write
