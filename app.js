@@ -37,6 +37,13 @@ app.use(logger('dev'));
 //app.use('/', routes);
 //app.use('/users', users);
 
+//console.log("Serial: ", process.env.npm_package_config_dev);
+
+//var serial = new SerialPort(process.env.npm_package_config_dev, {
+var serial = new SerialPort("/dev/ttyAMA0", {
+	baudrate: 9600,
+	parser: serialport.parsers.readline("\r\n")
+}/*, false */);
 
 function sendCommand(req, res) {
 	//serial.open(function (error) {
@@ -57,12 +64,14 @@ function sendCommand(req, res) {
 }
 
 serial.on('data', function handleData (data) {
-	console.log("Data from serial: ", data);
+	//data = data.toString();
+	console.log("Data from serial: " + data + ".");
+	//console.log(typeof(data));
 	if (data === '!p0!') {
 		console.log("Out of filament, pausing print!");
 		var child = exec('/home/berocs/cerealbot/util/send_pause_print.sh');
 	}
-	serial.removeListener('data', handleData);
+	//serial.removeListener('data', handleData);
 });
 
 function sendCommandResp(req, res) {
@@ -112,13 +121,6 @@ stdin.addListener("data", function(d) {
 app.get('/serialCmdResp', sendCommandResp);
 app.get('/serialCmd', sendCommand);
 
-//console.log("Serial: ", process.env.npm_package_config_dev);
-
-//var serial = new SerialPort(process.env.npm_package_config_dev, {
-var serial = new SerialPort("/dev/ttyAMA0", {
-	baudrate: 9600,
-	parser: serialport.parsers.readline("\n")
-}/*, false */);
 
 
 // catch 404 and forward to error handler
